@@ -456,65 +456,136 @@
         </div>
 
         <!-- Comments -->
-        <section class="m-0 p-0" id="ucapan">
-            <div class="container">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ucapan & Doa</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <section class="m-0 p-0" id="ucapan">
+        <div class="container">
+            <div class="card-body border rounded-4 shadow p-3">
+                <h1 class="font-esthetic text-center mb-3" style="font-size: 3rem;">Ucapan & Doa</h1>
+                <div class="mb-1" id="balasan"></div>
 
-                <div class="card-body border rounded-4 shadow p-3">
-                    <h1 class="font-esthetic text-center mb-3" style="font-size: 3rem;">Ucapan & Doa</h1>
-                    <div class="mb-1" id="balasan"></div>
-
-                    <div class="mb-3">
-                        <label for="form-name" class="form-label">Nama</label>
-                        <input type="text" class="form-control shadow-sm" id="form-name" placeholder="Isikan Nama Anda">
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="form-presence" class="form-label" id="label-kehadiran">Kehadiran</label>
-                        <select class="form-select shadow-sm" id="form-presence">
-                            <option value="0" selected>Konfirmasi Kehadiran</option>
-                            <option value="1">Hadir</option>
-                            <option value="2">Berhalangan</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="form-comment" class="form-label">Ucapan & Doa</label>
-                        <div id="information" class="alert alert-info alert-dismissible fade show" role="alert">
-                            <p style="font-size: 1.5rem;">Bestieee!!!</p>
-                            <p class="m-0">Sekarang bisa format text seperti whatsapp lohh... cobainn sekaranggg, makaciwww bestieee</p>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="localStorage.setItem('alertClosed', 'true');"></button>
-                        </div>
-                        <textarea class="form-control shadow-sm" id="form-comment" rows="4" placeholder="Tulis Ucapan & Doa"></textarea>
-                    </div>
-
-                    <div class="d-grid">
-                        <button class="btn btn-primary btn-sm rounded-3 shadow m-1" onclick="comment.send(this)">
-                            <i class="fa-solid fa-paper-plane me-1"></i>Send
-                        </button>
-                    </div>
+                <div class="mb-3">
+                    <label for="form-name" class="form-label">Nama</label>
+                    <input type="text" class="form-control shadow-sm" id="form-name" placeholder="Isikan Nama Anda">
                 </div>
 
-                <div class="mt-4 mb-2" id="comments"></div>
+                <div class="mb-3">
+                    <label for="form-presence" class="form-label" id="label-kehadiran">Kehadiran</label>
+                    <select class="form-select shadow-sm" id="form-presence">
+                        <option value="0" selected>Konfirmasi Kehadiran</option>
+                        <option value="1">Hadir</option>
+                        <option value="2">Berhalangan</option>
+                    </select>
+                </div>
 
-                <nav class="d-flex justify-content-center mb-0">
-                    <ul class="pagination mb-0">
-                        <li class="page-item disabled" id="previous">
-                            <button class="page-link" onclick="pagination.previous(this)">
-                                <i class="fa-solid fa-circle-left me-1"></i>Previous
-                            </button>
-                        </li>
-                        <li class="page-item disabled">
-                            <span class="page-link text-light" id="page">1</span>
-                        </li>
-                        <li class="page-item" id="next">
-                            <button class="page-link" onclick="pagination.next(this)">
-                                Next<i class="fa-solid fa-circle-right ms-1"></i>
-                            </button>
-                        </li>
-                    </ul>
-                </nav>
+                <div class="mb-3">
+                    <label for="form-comment" class="form-label">Ucapan & Doa</label>
+                    <textarea class="form-control shadow-sm" id="form-comment" rows="4" placeholder="Tulis Ucapan & Doa"></textarea>
+                </div>
+
+                <div class="d-grid">
+                    <button class="btn btn-primary btn-sm rounded-3 shadow m-1" onclick="sendComment()">
+                        <i class="fa-solid fa-paper-plane me-1"></i>Send
+                    </button>
+                </div>
             </div>
-        </section>
+
+            <div class="mt-4 mb-2" id="comments"></div>
+
+            <nav class="d-flex justify-content-center mb-0">
+                <ul class="pagination mb-0">
+                    <li class="page-item disabled" id="previous">
+                        <button class="page-link" onclick="previousPage()">
+                            <i class="fa-solid fa-circle-left me-1"></i>Previous
+                        </button>
+                    </li>
+                    <li class="page-item disabled">
+                        <span class="page-link text-light" id="page">1</span>
+                    </li>
+                    <li class="page-item" id="next">
+                        <button class="page-link" onclick="nextPage()">
+                            Next<i class="fa-solid fa-circle-right ms-1"></i>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        // Array untuk menyimpan komentar
+        let comments = [];
+
+        // Fungsi untuk mengirim komentar
+        function sendComment() {
+            let name = document.getElementById("form-name").value;
+            let presence = document.getElementById("form-presence").value;
+            let comment = document.getElementById("form-comment").value;
+
+            // Validasi input
+            if (name === "" || presence === "0" || comment === "") {
+                alert("Silakan lengkapi semua kolom.");
+                return;
+            }
+
+            // Simpan komentar ke dalam array
+            comments.push({ name: name, presence: presence, comment: comment });
+
+            // Tampilkan komentar terbaru
+            displayComments();
+
+            // Kosongkan formulir
+            document.getElementById("form-name").value = "";
+            document.getElementById("form-presence").value = "0";
+            document.getElementById("form-comment").value = "";
+        }
+
+        // Fungsi untuk menampilkan komentar
+        function displayComments() {
+            let commentsDiv = document.getElementById("comments");
+            commentsDiv.innerHTML = "";
+
+            for (let i = 0; i < comments.length; i++) {
+                let comment = comments[i];
+                let commentElement = document.createElement("div");
+                commentElement.innerHTML = `
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <h5 class="card-title">${comment.name}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">${comment.presence === "1" ? "Hadir" : "Berhalangan"}</h6>
+                            <p class="card-text">${comment.comment}</p>
+                        </div>
+                    </div>
+                `;
+                commentsDiv.appendChild(commentElement);
+            }
+        }
+
+        // Fungsi untuk halaman sebelumnya
+        function previousPage() {
+            alert("Implementasi paginasi belum ditambahkan.");
+        }
+
+        // Fungsi untuk halaman berikutnya
+        function nextPage() {
+            alert("Implementasi paginasi belum ditambahkan.");
+        }
+    </script>
+</body>
+</html>
 
         <!-- Wave Separator -->
         <svg xmlns="https://www.w3.org/2000/svg" viewBox="0 0 1440 320" class="color-theme-black">
